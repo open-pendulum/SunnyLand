@@ -25,6 +25,14 @@ set(SOURCES
         src/engine/core/time.h
         src/engine/core/time.cpp
         src/utils/logger.hpp
+        src/engine/resource/resource_manager.h
+        src/engine/resource/resource_manager.cpp
+        src/engine/resource/audio_manager.h
+        src/engine/resource/audio_manager.cpp
+        src/engine/resource/texture_manager.h
+        src/engine/resource/texture_manager.cpp
+        src/engine/resource/font_manager.h
+        src/engine/resource/font_manager.cpp
 )
 
 add_subdirectory(third_party)
@@ -34,7 +42,7 @@ add_executable(${TARGET}
 )
 
 target_include_directories(${TARGET} PRIVATE
-    src/utils
+        src/utils
 )
 
 
