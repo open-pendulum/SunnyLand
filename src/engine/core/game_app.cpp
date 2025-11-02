@@ -1,4 +1,5 @@
 #include "game_app.h"
+#include "config.h"
 #include "logger.hpp"
 #include "render/camera.h"
 #include "render/renderer.h"
@@ -39,6 +40,11 @@ void GameApp::Run() {
 }
 bool GameApp::Init() {
   TRACEI(TAG);
+  if (!InitConfig()) {
+    LOGE(TAG, "Failed to initialize!");
+    return false;
+  }
+
   if (!InitSDL()) {
     LOGE(TAG, "Failed to initialize!");
     return false;
@@ -135,7 +141,9 @@ bool GameApp::InitSDL() {
     return false;
   }
 
-  sdl_window_ = SDL_CreateWindow("SunnyLand", 1280, 720, SDL_WINDOW_RESIZABLE);
+  sdl_window_ =
+      SDL_CreateWindow(config_->WindowTitle().c_str(), config_->WindowWidth(),
+                       config_->WindowHeight(), SDL_WINDOW_RESIZABLE);
   if (!sdl_window_) {
     LOGE(TAG, "Failed to create window! SDL Error: {}", SDL_GetError());
     return false;
@@ -146,7 +154,9 @@ bool GameApp::InitSDL() {
     LOGE(TAG, "Failed to create renderer! SDL Error: %s", SDL_GetError());
     return false;
   }
-  SDL_SetRenderLogicalPresentation(sdl_renderer_, 640, 360,
+
+  SDL_SetRenderLogicalPresentation(sdl_renderer_, config_->WindowWidth() / 2,
+                                   config_->WindowHeight() / 2,
                                    SDL_LOGICAL_PRESENTATION_LETTERBOX);
   return true;
 }
@@ -165,6 +175,7 @@ bool GameApp::InitTime() {
   TRACEI(TAG);
   try {
     time_ = std::make_unique<Time>();
+    time_->SetTargetFPS(config_->TargetFps());
   } catch (const std::exception& e) {
     LOGE(TAG, "Failed to initialize Time! Error: {}", e.what());
     return false;
@@ -185,12 +196,17 @@ bool GameApp::InitRenderer() {
 bool GameApp::InitCamera() {
   TRACEI(TAG);
   try {
-    camera_ =
-        std::make_unique<engine::render::Camera>(glm::vec2(640.0f, 360.0f));
+    camera_ = std::make_unique<engine::render::Camera>(glm::vec2(
+        config_->WindowWidth() / 2.0f, config_->WindowHeight() / 2.0f));
   } catch (const std::exception& e) {
     LOGE(TAG, "Failed to initialize Camera! Error: {}", e.what());
     return false;
   }
+  return true;
+}
+bool GameApp::InitConfig() {
+  TRACEI(TAG);
+  config_ = std::make_unique<Config>("../assets/config.json");
   return true;
 }
 }  // namespace engine::core

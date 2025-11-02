@@ -15,6 +15,7 @@ class Renderer;
 
 namespace engine::core {
 class Time;
+class Config;
 class GameApp {
  public:
   GameApp();
@@ -47,6 +48,7 @@ class GameApp {
   [[nodiscard]] bool InitTime();
   [[nodiscard]] bool InitRenderer();
   [[nodiscard]] bool InitCamera();
+  [[nodiscard]] bool InitConfig();
 
  private:
   SDL_Window* sdl_window_{nullptr};
@@ -56,5 +58,6 @@ class GameApp {
   std::unique_ptr<engine::resource::ResourceManager> resource_manager_{nullptr};
   std::unique_ptr<engine::render::Camera> camera_{nullptr};
   std::unique_ptr<engine::render::Renderer> renderer_{nullptr};
+  std::unique_ptr<engine::core::Config> config_{nullptr};
 };
 }  // namespace engine::core

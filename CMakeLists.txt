@@ -24,6 +24,8 @@ set(SOURCES
         src/engine/core/game_app.cpp
         src/engine/core/time.h
         src/engine/core/time.cpp
+        src/engine/core/config.h
+        src/engine/core/config.cpp
         src/common/logger.hpp
         src/engine/utils/math.hpp
         src/engine/resource/resource_manager.h
