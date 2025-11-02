@@ -62,10 +62,12 @@ void ResourceManager::UnloadMusic(const std::string& name) {
 void ResourceManager::ClearMusic() const {
   audio_manager_->ClearMusic();
 }
-TTF_Font* ResourceManager::LoadFont(const std::string& name, int32_t point_size) const {
+TTF_Font* ResourceManager::LoadFont(const std::string& name,
+                                    int32_t point_size) const {
   return font_manager_->LoadFont(name, point_size);
 }
-TTF_Font* ResourceManager::GetFont(const std::string& name, int32_t point_size) const {
+TTF_Font* ResourceManager::GetFont(const std::string& name,
+                                   int32_t point_size) const {
   return font_manager_->GetFont(name, point_size);
 }
 void ResourceManager::UnloadFont(const std::string& name, int32_t point_size) {

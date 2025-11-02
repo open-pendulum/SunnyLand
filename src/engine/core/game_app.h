@@ -6,7 +6,12 @@ struct SDL_Renderer;
 
 namespace engine::resource {
 class ResourceManager;
-}
+}  // namespace engine::resource
+
+namespace engine::render {
+class Camera;
+class Renderer;
+}  // namespace engine::render
 
 namespace engine::core {
 class Time;
@@ -40,12 +45,16 @@ class GameApp {
   [[nodiscard]] bool InitSDL();
   [[nodiscard]] bool InitResourceManager();
   [[nodiscard]] bool InitTime();
+  [[nodiscard]] bool InitRenderer();
+  [[nodiscard]] bool InitCamera();
 
  private:
-  SDL_Window* window_{nullptr};
-  SDL_Renderer* renderer_{nullptr};
+  SDL_Window* sdl_window_{nullptr};
+  SDL_Renderer* sdl_renderer_{nullptr};
   bool is_running_{true};
   std::unique_ptr<Time> time_{nullptr};
   std::unique_ptr<engine::resource::ResourceManager> resource_manager_{nullptr};
+  std::unique_ptr<engine::render::Camera> camera_{nullptr};
+  std::unique_ptr<engine::render::Renderer> renderer_{nullptr};
 };
 }  // namespace engine::core

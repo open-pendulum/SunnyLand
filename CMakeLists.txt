@@ -24,7 +24,8 @@ set(SOURCES
         src/engine/core/game_app.cpp
         src/engine/core/time.h
         src/engine/core/time.cpp
-        src/utils/logger.hpp
+        src/common/logger.hpp
+        src/engine/utils/math.hpp
         src/engine/resource/resource_manager.h
         src/engine/resource/resource_manager.cpp
         src/engine/resource/audio_manager.h
@@ -33,6 +34,12 @@ set(SOURCES
         src/engine/resource/texture_manager.cpp
         src/engine/resource/font_manager.h
         src/engine/resource/font_manager.cpp
+        src/engine/render/renderer.h
+        src/engine/render/renderer.cpp
+        src/engine/render/camera.h
+        src/engine/render/camera.cpp
+        src/engine/render/sprite.h
+        src/engine/render/sprite.cpp
 )
 
 add_subdirectory(third_party)
@@ -42,7 +49,7 @@ add_executable(${TARGET}
 )
 
 target_include_directories(${TARGET} PRIVATE
-        src/utils
+        src/common
         src/engine
 )
 
