@@ -42,6 +42,8 @@ set(SOURCES
         src/engine/render/camera.cpp
         src/engine/render/sprite.h
         src/engine/render/sprite.cpp
+        src/engine/input/input_manager.h
+        src/engine/input/input_manager.cpp
 )
 
 add_subdirectory(third_party)
