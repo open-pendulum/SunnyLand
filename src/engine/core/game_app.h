@@ -4,6 +4,10 @@
 struct SDL_Window;
 struct SDL_Renderer;
 
+namespace engine::resource {
+class ResourceManager;
+}
+
 namespace engine::core {
 class Time;
 class GameApp {
@@ -33,10 +37,15 @@ class GameApp {
 
   void Close();
 
+  [[nodiscard]] bool InitSDL();
+  [[nodiscard]] bool InitResourceManager();
+  [[nodiscard]] bool InitTime();
+
  private:
   SDL_Window* window_{nullptr};
   SDL_Renderer* renderer_{nullptr};
   bool is_running_{true};
   std::unique_ptr<Time> time_{nullptr};
+  std::unique_ptr<engine::resource::ResourceManager> resource_manager_{nullptr};
 };
 }  // namespace engine::core

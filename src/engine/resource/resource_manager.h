@@ -41,10 +41,10 @@ class ResourceManager final {
   void UnloadMusic(const std::string& name);
   void ClearMusic() const;
 
-  TTF_Font* LoadTTF(const std::string& name) const;
-  TTF_Font* GetTTF(const std::string& name) const;
-  void UnloadTTF(const std::string& name);
-  void ClearTTFs() const;
+  TTF_Font* LoadFont(const std::string& name, int32_t point_size) const;
+  TTF_Font* GetFont(const std::string& name, int32_t point_size) const;
+  void UnloadFont(const std::string& name, int32_t point_size);
+  void ClearFonts() const;
 
  private:
   std::unique_ptr<TextureManager> texture_manager_{nullptr};

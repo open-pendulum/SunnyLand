@@ -43,6 +43,7 @@ add_executable(${TARGET}
 
 target_include_directories(${TARGET} PRIVATE
         src/utils
+        src/engine
 )
 
 
