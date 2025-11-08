@@ -26,6 +26,7 @@ class Config final {
   const int32_t& TargetFps() const;
   const float& MusicVolume() const;
   const float& SoundVolume() const;
+  const std::unordered_map<std::string, std::vector<std::string>>& InputMappings() const;
 
  private:
   void FromJson(const nlohmann::json& json);

@@ -73,6 +73,12 @@ const float& Config::MusicVolume() const {
 const float& Config::SoundVolume() const {
   return sound_volume_;
 }
+
+const std::unordered_map<std::string, std::vector<std::string>>&
+Config::InputMappings() const {
+  return input_mappings_;
+}
+
 void Config::FromJson(const nlohmann::json& json) {
   if (json.contains("window")) {
     const auto& window_json = json["window"];
