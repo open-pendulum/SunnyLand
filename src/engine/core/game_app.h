@@ -13,6 +13,10 @@ class Camera;
 class Renderer;
 }  // namespace engine::render
 
+namespace engine::input {
+class InputManager;
+}  // namespace engine::input
+
 namespace engine::core {
 class Time;
 class Config;
@@ -49,6 +53,7 @@ class GameApp {
   [[nodiscard]] bool InitRenderer();
   [[nodiscard]] bool InitCamera();
   [[nodiscard]] bool InitConfig();
+  [[nodiscard]] bool InitInputManager();
 
  private:
   SDL_Window* sdl_window_{nullptr};
@@ -59,5 +64,6 @@ class GameApp {
   std::unique_ptr<engine::render::Camera> camera_{nullptr};
   std::unique_ptr<engine::render::Renderer> renderer_{nullptr};
   std::unique_ptr<engine::core::Config> config_{nullptr};
+  std::unique_ptr<engine::input::InputManager> input_manager_{nullptr};
 };
 }  // namespace engine::core

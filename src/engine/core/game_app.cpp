@@ -1,5 +1,6 @@
 #include "game_app.h"
 #include "config.h"
+#include "input/input_manager.h"
 #include "logger.hpp"
 #include "render/camera.h"
 #include "render/renderer.h"
@@ -33,8 +34,11 @@ void GameApp::Run() {
   time_->SetTargetFPS(144);
   while (is_running_) {
     time_->Update();
+    double delta_time_s = time_->GetDeltaTimeS();
+
+    input_manager_->Update();
     HandleEvents();
-    Update(time_->GetDeltaTimeS());
+    Update(delta_time_s);
     Render();
   }
 }
@@ -49,6 +53,12 @@ bool GameApp::Init() {
     LOGE(TAG, "Failed to initialize!");
     return false;
   }
+
+  if (!InitInputManager()) {
+    LOGE(TAG, "Failed to initialize!");
+    return false;
+  }
+
   if (!InitTime()) {
     LOGE(TAG, "Failed to initialize!");
     return false;
@@ -67,9 +77,12 @@ bool GameApp::Init() {
   }
   {
     // test resource
-    resource_manager_->GetTexture("../assets/textures/Actors/frog.png");
-    resource_manager_->GetTexture("../assets/textures/UI/buttons/Start1.png");
-    resource_manager_->GetTexture("../assets/textures/Layers/back.png");
+    resource_manager_->GetTexture(
+        "D:/workspace/SunnyLand/assets/textures/Actors/frog.png");
+    resource_manager_->GetTexture(
+        "D:/workspace/SunnyLand/assets/textures/UI/buttons/Start1.png");
+    resource_manager_->GetTexture(
+        "D:/workspace/SunnyLand/assets/textures/Layers/back.png");
   }
   is_running_ = true;
   return true;
@@ -94,11 +107,12 @@ void GameApp::Render() {
   renderer_->ClearScreen();
   {
     // test render
-    engine::render::Sprite sprite_world("../assets/textures/Actors/frog.png");
+    engine::render::Sprite sprite_world(
+        "D:/workspace/SunnyLand/assets/textures/Actors/frog.png");
     engine::render::Sprite sprite_ui(
-        "../assets/textures/UI/buttons/Start1.png");
+        "D:/workspace/SunnyLand/assets/textures/UI/buttons/Start1.png");
     engine::render::Sprite sprite_parallax(
-        "../assets/textures/Layers/back.png");
+        "D:/workspace/SunnyLand/assets/textures/Layers/back.png");
 
     static float rotation = 0.0f;
     rotation += 0.1f;
@@ -113,10 +127,26 @@ void GameApp::Render() {
   renderer_->Present();
 }
 void GameApp::HandleEvents() {
-  SDL_Event event;
-  while (SDL_PollEvent(&event)) {
-    if (event.type == SDL_EVENT_QUIT) {
-      is_running_ = false;
+  if (input_manager_->ShouldQuit()) {
+    LOGI(TAG, "Quitting!");
+    is_running_ = false;
+    return;
+  }
+  {
+    std::vector<std::string> actions = {
+        "move_up", "move_down", "move_left",      "move_right",     "jump",
+        "attack",  "pause",     "MouseLeftClick", "MouseRightClick"};
+
+    for (const auto& action : actions) {
+      if (input_manager_->IsActionPressed(action)) {
+        spdlog::info(" {} 按下 ", action);
+      }
+      if (input_manager_->IsActionReleased(action)) {
+        spdlog::info(" {} 抬起 ", action);
+      }
+      if (input_manager_->IsActionDown(action)) {
+        spdlog::info(" {} 按下中 ", action);
+      }
     }
   }
 }
@@ -206,7 +236,18 @@ bool GameApp::InitCamera() {
 }
 bool GameApp::InitConfig() {
   TRACEI(TAG);
-  config_ = std::make_unique<Config>("../assets/config.json");
+  config_ =
+      std::make_unique<Config>("D:/workspace/SunnyLand/assets/config.json");
+  return true;
+}
+bool GameApp::InitInputManager() {
+  try {
+    input_manager_ = std::make_unique<engine::input::InputManager>(
+        sdl_renderer_, config_.get());
+  } catch (const std::exception& e) {
+    LOGE(TAG, "Failed to initialize InputManager! Error: {}", e.what());
+    return false;
+  }
   return true;
 }
 }  // namespace engine::core

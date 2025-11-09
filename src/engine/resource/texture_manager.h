@@ -2,6 +2,7 @@
 #include <SDL3/SDL_render.h>
 #include <glm/glm.hpp>
 #include <string>
+#include <memory>
 
 struct SDL_Texture;
 

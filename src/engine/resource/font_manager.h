@@ -3,6 +3,7 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 namespace engine::resource {
 

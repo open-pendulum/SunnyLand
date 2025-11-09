@@ -1,1 +1,2 @@
 add_subdirectory(SDL3_mixer)
+add_subdirectory(nlohmann_json)

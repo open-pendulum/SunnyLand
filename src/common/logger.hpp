@@ -5,7 +5,7 @@
 
 #define LOG_FORMAT_STR(fmt, ...) std::format(fmt __VA_OPT__(, ) __VA_ARGS__)
 #define LOG_PREFIX_STR(tag) \
-  LOG_FORMAT_STR("[{}][{}][{}][{}]", __FILE_NAME__, __LINE__, tag, __FUNCTION__)
+  LOG_FORMAT_STR("[{}][{}][{}][{}]", __FILE__, __LINE__, tag, __FUNCTION__)
 
 #define LOGT(tag, msg, ...)                   \
   spdlog::trace("{} {}", LOG_PREFIX_STR(tag), \
@@ -49,4 +49,4 @@ class Tracer {
 }  // namespace engine::utils
 
 #define TRACEI(tag) \
-  engine::utils::Tracer tracer(__FILE_NAME__, __LINE__, __func__, tag)
+  engine::utils::Tracer tracer(__FILE__, __LINE__, __func__, tag)

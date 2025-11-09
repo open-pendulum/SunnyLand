@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0.0)
+cmake_minimum_required(VERSION 3.20.0)
 project(SunnyLand)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -15,7 +15,7 @@ find_package(SDL3 REQUIRED)
 find_package(SDL3_image REQUIRED)
 find_package(SDL3_ttf REQUIRED)
 find_package(glm REQUIRED)
-find_package(nlohmann_json REQUIRED)
+# find_package(nlohmann_json REQUIRED)
 find_package(spdlog REQUIRED)
 
 set(SOURCES
@@ -68,4 +68,12 @@ target_link_libraries(${TARGET} PRIVATE
         spdlog::spdlog
 )
 
-target_compile_options(${TARGET} PRIVATE -Wall -Wextra -Wpedantic)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(${TARGET} PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+# 针对 MSVC（Visual Studio 编译器）：用 MSVC 支持的警告等级 /W4（等价于 GCC 的 -Wall -Wextra）
+if(MSVC)
+        target_compile_options(${TARGET} PRIVATE "/Zc:preprocessor")  # 关键：启用新预处理，支持 __VA_OPT__
+        target_compile_options(${TARGET} PRIVATE "/W4" "/wd4100" "/wd4267")  
+endif()

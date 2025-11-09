@@ -3,6 +3,7 @@
 #include <SDL3_mixer/SDL_mixer.h>
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 namespace engine::resource {
 
