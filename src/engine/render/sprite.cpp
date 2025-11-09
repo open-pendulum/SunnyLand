@@ -21,7 +21,7 @@ void Sprite::SetTextureId(const std::string& texture_id) {
 void Sprite::SetSourceRect(const std::optional<SDL_FRect>& source_rect) {
   source_rect_ = source_rect;
 }
-void Sprite::SetIsFlipped(bool is_flipped) {
-  is_flipped_ = is_flipped;
+void Sprite::SetFlipped(bool flipped) {
+  is_flipped_ = flipped;
 }
 }  // namespace engine::render

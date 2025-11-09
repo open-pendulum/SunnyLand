@@ -17,7 +17,7 @@ class Sprite final {
 
   void SetTextureId(const std::string& texture_id);
   void SetSourceRect(const std::optional<SDL_FRect>& source_rect);
-  void SetIsFlipped(bool is_flipped);
+  void SetFlipped(bool flipped);
 
  private:
   std::string texture_id_;

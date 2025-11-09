@@ -1,11 +1,15 @@
 #include "game_app.h"
 #include "config.h"
+#include "context.h"
 #include "input/input_manager.h"
 #include "logger.hpp"
+#include "object/game_object.h"
 #include "render/camera.h"
 #include "render/renderer.h"
 #include "render/sprite.h"
 #include "resource/resource_manager.h"
+#include "component/transform_component.h"
+#include "component/sprite_component.h"
 #include "time.h"
 
 #include <SDL3/SDL.h>
@@ -13,6 +17,12 @@
 namespace engine::core {
 namespace {
 DECLARE_TAG(GameApp)
+engine::object::GameObject game_object("test_game_object");
+
+void TestGameObject() {
+
+}
+
 }  // namespace
 GameApp::GameApp() {
   TRACEI(TAG);
@@ -75,13 +85,34 @@ bool GameApp::Init() {
     LOGE(TAG, "Failed to initialize!");
     return false;
   }
+  if (!InitContext()) {
+    LOGE(TAG, "Failed to initialize!");
+    return false;
+  }
   {
-    // test resource
-    resource_manager_->GetTexture("D:/workspace/SunnyLand/assets/textures/Actors/frog.png");
-    resource_manager_->GetTexture("D:/workspace/SunnyLand/assets/textures/UI/buttons/Start1.png");
-    resource_manager_->GetTexture("D:/workspace/SunnyLand/assets/textures/Layers/back.png");
+    spdlog::info("========== 测试组件系统 ==========");
+
+    // 1. 添加 TransformComponent，让对象出现在 (100, 100)
+    game_object.AddComponent<engine::component::TransformComponent>(
+        glm::vec2(100.0f, 100.0f)
+    );
+
+    // 2. 添加 SpriteComponent，显示箱子贴图，设置渲染中心为图片的几何中心
+    game_object.AddComponent<engine::component::SpriteComponent>(
+        "D:/workspace/SunnyLand/assets/textures/Props/big-crate.png",
+        *resource_manager_,
+        engine::utils::Alignment::BOTTOM_CENTER
+    );
+
+    // 3. 获取 TransformComponent，修改缩放和旋转
+    game_object.GetComponent<engine::component::TransformComponent>()->SetScale(glm::vec2(2.0f, 2.0f));  // 放大 2 倍
+    game_object.GetComponent<engine::component::TransformComponent>()->SetRotation(30.0f);                // 旋转 30 度
+    spdlog::info("✓ Transform 组件配置完成");
+
+    spdlog::info("====================================");
   }
   is_running_ = true;
+
   return true;
 }
 
@@ -117,6 +148,7 @@ void GameApp::Render() {
     renderer_->DrawSprite(*camera_, sprite_world, glm::vec2(200, 200), glm::vec2(1.0f, 1.0f), rotation);
     renderer_->DrawUISprite(sprite_ui, glm::vec2(100, 100));
   }
+  game_object.Render(*context_);
   renderer_->Present();
 }
 void GameApp::HandleEvents() {
@@ -232,6 +264,15 @@ bool GameApp::InitInputManager() {
     input_manager_ = std::make_unique<engine::input::InputManager>(sdl_renderer_, config_.get());
   } catch (const std::exception& e) {
     LOGE(TAG, "Failed to initialize InputManager! Error: {}", e.what());
+    return false;
+  }
+  return true;
+}
+bool GameApp::InitContext() {
+  try {
+    context_ = std::make_unique<Context>(*input_manager_, *renderer_, *camera_, *resource_manager_);
+  } catch (const std::exception& e) {
+    LOGE(TAG, "Failed to initialize Context! Error: {}", e.what());
     return false;
   }
   return true;

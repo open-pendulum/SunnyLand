@@ -1,0 +1,48 @@
+#pragma once
+#include <glm/vec2.hpp>
+#include "component.h"
+
+namespace engine::component {
+
+class TransformComponent final : public Component {
+  friend class engine::object::GameObject;
+
+ public:
+  glm::vec2 position_ = {0.0f, 0.0f};
+  glm::vec2 scale_ = {1.0f, 1.0f};
+  float rotation_ = 0.0f;
+
+  explicit TransformComponent(glm::vec2 position = {0.0f, 0.0f}, glm::vec2 scale = {1.0f, 1.0f}, float rotation = 0.0f);
+  ~TransformComponent() override = default;
+  // 禁止拷贝和移动
+  TransformComponent(const TransformComponent&) = delete;
+  TransformComponent& operator=(const TransformComponent&) = delete;
+  TransformComponent(TransformComponent&&) = delete;
+  TransformComponent& operator=(TransformComponent&&) = delete;
+
+  [[nodiscard]] const glm::vec2& GetPosition() const {
+    return position_;
+  }
+  [[nodiscard]] float GetRotation() const {
+    return rotation_;
+  }
+  [[nodiscard]] const glm::vec2& GetScale() const {
+    return scale_;
+  }
+  void SetPosition(const glm::vec2& position) {
+    position_ = position;
+  }
+  void SetRotation(float rotation) {
+    rotation_ = rotation;
+  }
+  void SetScale(const glm::vec2& scale);
+  void Translate(const glm::vec2& offset) {
+    position_ += offset;
+  }
+
+ private:
+  void Update(float delta_time_s, engine::core::Context& context) override {
+  }
+};
+
+}  // namespace engine::component
