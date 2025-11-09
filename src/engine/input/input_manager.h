@@ -13,17 +13,11 @@ class Config;
 
 namespace engine::input {
 
-enum class ActionState {
-  kInactive,
-  kPressedThisFrame,
-  kHeldDown,
-  kReleasedThisFrame
-};
+enum class ActionState { kInactive, kPressedThisFrame, kHeldDown, kReleasedThisFrame };
 
 class InputManager final {
  public:
-  explicit InputManager(SDL_Renderer* sdl_renderer,
-                        const engine::core::Config* config);
+  explicit InputManager(SDL_Renderer* sdl_renderer, const engine::core::Config* config);
 
   void Update();
 
@@ -41,18 +35,14 @@ class InputManager final {
   void ProcessEvent(const SDL_Event& event);
   void InitializeMappings(const engine::core::Config* config);
 
-  void UpdateActionState(std::string_view action_name, bool is_input_active,
-                         bool is_repeat_event);
+  void UpdateActionState(std::string_view action_name, bool is_input_active, bool is_repeat_event);
   SDL_Scancode ScancodeFromString(std::string_view key_name);
   Uint32 MouseButtonFromString(std::string_view button_name);
 
  private:
   SDL_Renderer* sdl_renderer_;
-  std::unordered_map<std::string, std::vector<std::string>>
-      actions_to_keyname_map_;
-  std::unordered_map<std::variant<SDL_Scancode, Uint32>,
-                     std::vector<std::string>>
-      input_to_actions_map_;
+  std::unordered_map<std::string, std::vector<std::string>> actions_to_keyname_map_;
+  std::unordered_map<std::variant<SDL_Scancode, Uint32>, std::vector<std::string>> input_to_actions_map_;
 
   std::unordered_map<std::string, ActionState> action_states_;
 

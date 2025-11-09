@@ -1,9 +1,9 @@
 #pragma once
 
 #include <SDL3_ttf/SDL_ttf.h>
+#include <memory>
 #include <string>
 #include <unordered_map>
-#include <memory>
 
 namespace engine::resource {
 
@@ -36,12 +36,9 @@ class FontManager final {
   using FontKey = std::pair<std::string, int32_t>;
   struct FontKeyHash {
     std::size_t operator()(const FontKey& key) const {
-      return std::hash<std::string>()(key.first) ^
-             std::hash<int32_t>()(key.second);
+      return std::hash<std::string>()(key.first) ^ std::hash<int32_t>()(key.second);
     }
   };
-  std::unordered_map<FontKey, std::unique_ptr<TTF_Font, SDLFontDeleter>,
-                     FontKeyHash>
-      fonts_;
+  std::unordered_map<FontKey, std::unique_ptr<TTF_Font, SDLFontDeleter>, FontKeyHash> fonts_;
 };
 }  // namespace engine::resource

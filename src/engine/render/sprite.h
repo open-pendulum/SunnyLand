@@ -7,8 +7,7 @@
 namespace engine::render {
 class Sprite final {
  public:
-  explicit Sprite(const std::string& texture_id,
-                  const std::optional<SDL_FRect>& source_rect = std::nullopt,
+  explicit Sprite(const std::string& texture_id, const std::optional<SDL_FRect>& source_rect = std::nullopt,
                   bool is_flipped = false);
   ~Sprite();
 

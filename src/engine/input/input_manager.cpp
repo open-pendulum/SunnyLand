@@ -10,8 +10,7 @@ namespace {
 DECLARE_TAG(InputManager)
 }  // namespace
 
-InputManager::InputManager(SDL_Renderer* sdl_renderer,
-                           const engine::core::Config* config)
+InputManager::InputManager(SDL_Renderer* sdl_renderer, const engine::core::Config* config)
     : sdl_renderer_(sdl_renderer) {
   if (!sdl_renderer_) {
     LOGE(TAG, "SDL_Renderer is nullptr");
@@ -21,8 +20,7 @@ InputManager::InputManager(SDL_Renderer* sdl_renderer,
   float x, y;
   SDL_GetMouseState(&x, &y);
   mouse_position_ = {x, y};
-  LOGI(TAG, "Init mouse position: ({}, {})", mouse_position_.x,
-       mouse_position_.y);
+  LOGI(TAG, "Init mouse position: ({}, {})", mouse_position_.x, mouse_position_.y);
 }
 
 void InputManager::Update() {
@@ -84,25 +82,21 @@ void InputManager::ProcessEvent(const SDL_Event& event) {
 }
 
 bool InputManager::IsActionDown(std::string_view action_name) const {
-  if (const auto it = action_states_.find(std::string(action_name));
-      it != action_states_.end()) {
-    return it->second == ActionState::kPressedThisFrame ||
-           it->second == ActionState::kHeldDown;
+  if (const auto it = action_states_.find(std::string(action_name)); it != action_states_.end()) {
+    return it->second == ActionState::kPressedThisFrame || it->second == ActionState::kHeldDown;
   }
   return false;
 }
 
 bool InputManager::IsActionPressed(std::string_view action_name) const {
-  if (const auto it = action_states_.find(std::string(action_name));
-      it != action_states_.end()) {
+  if (const auto it = action_states_.find(std::string(action_name)); it != action_states_.end()) {
     return it->second == ActionState::kPressedThisFrame;
   }
   return false;
 }
 
 bool InputManager::IsActionReleased(std::string_view action_name) const {
-  if (const auto it = action_states_.find(std::string(action_name));
-      it != action_states_.end()) {
+  if (const auto it = action_states_.find(std::string(action_name)); it != action_states_.end()) {
     return it->second == ActionState::kReleasedThisFrame;
   }
   return false;
@@ -122,9 +116,7 @@ glm::vec2 InputManager::GetMousePosition() const {
 
 glm::vec2 InputManager::GetLogicalMousePosition() const {
   glm::vec2 logical_pos;
-  SDL_RenderCoordinatesFromWindow(sdl_renderer_, mouse_position_.x,
-                                  mouse_position_.y, &logical_pos.x,
-                                  &logical_pos.y);
+  SDL_RenderCoordinatesFromWindow(sdl_renderer_, mouse_position_.x, mouse_position_.y, &logical_pos.x, &logical_pos.y);
   return logical_pos;
 }
 
@@ -139,9 +131,7 @@ void InputManager::InitializeMappings(const engine::core::Config* config) {
   action_states_.clear();
 
   if (!actions_to_keyname_map_.contains("MouseLeftClick")) {
-    LOGT(
-        TAG,
-        "MouseLeftClick has no mapping, add default mapping with 'MouseLeft'.");
+    LOGT(TAG, "MouseLeftClick has no mapping, add default mapping with 'MouseLeft'.");
 
     actions_to_keyname_map_["MouseLeftClick"] = {"MouseLeft"};
   }
@@ -160,12 +150,11 @@ void InputManager::InitializeMappings(const engine::core::Config* config) {
 
       if (scancode != SDL_SCANCODE_UNKNOWN) {
         input_to_actions_map_[scancode].push_back(action_name);
-        LOGT(TAG, "  map key: {} (Scancode: {}) to action: {}", key_name,
-             static_cast<int>(scancode), action_name);
+        LOGT(TAG, "  map key: {} (Scancode: {}) to action: {}", key_name, static_cast<int>(scancode), action_name);
       } else if (mouse_button != 0) {
         input_to_actions_map_[mouse_button].push_back(action_name);
-        LOGT(TAG, "  map mouse button: {} (Button ID: {}) to action: {}",
-             key_name, static_cast<int>(mouse_button), action_name);
+        LOGT(TAG, "  map mouse button: {} (Button ID: {}) to action: {}", key_name, static_cast<int>(mouse_button),
+             action_name);
       } else {
         LOGW(TAG, "  map unknown key: {} to action: {}", key_name, action_name);
       }
@@ -193,9 +182,7 @@ Uint32 InputManager::MouseButtonFromString(std::string_view button_name) {
   return 0;  // 0 is not a valid mouse button value
 }
 
-void InputManager::UpdateActionState(std::string_view action_name,
-                                     bool is_input_active,
-                                     bool is_repeat_event) {
+void InputManager::UpdateActionState(std::string_view action_name, bool is_input_active, bool is_repeat_event) {
   auto it = action_states_.find(std::string(action_name));
   if (it == action_states_.end()) {
     spdlog::warn("尝试更新未注册的动作状态: {}", action_name);

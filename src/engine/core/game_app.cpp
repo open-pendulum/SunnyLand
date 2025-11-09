@@ -77,12 +77,9 @@ bool GameApp::Init() {
   }
   {
     // test resource
-    resource_manager_->GetTexture(
-        "D:/workspace/SunnyLand/assets/textures/Actors/frog.png");
-    resource_manager_->GetTexture(
-        "D:/workspace/SunnyLand/assets/textures/UI/buttons/Start1.png");
-    resource_manager_->GetTexture(
-        "D:/workspace/SunnyLand/assets/textures/Layers/back.png");
+    resource_manager_->GetTexture("D:/workspace/SunnyLand/assets/textures/Actors/frog.png");
+    resource_manager_->GetTexture("D:/workspace/SunnyLand/assets/textures/UI/buttons/Start1.png");
+    resource_manager_->GetTexture("D:/workspace/SunnyLand/assets/textures/Layers/back.png");
   }
   is_running_ = true;
   return true;
@@ -107,21 +104,17 @@ void GameApp::Render() {
   renderer_->ClearScreen();
   {
     // test render
-    engine::render::Sprite sprite_world(
-        "D:/workspace/SunnyLand/assets/textures/Actors/frog.png");
-    engine::render::Sprite sprite_ui(
-        "D:/workspace/SunnyLand/assets/textures/UI/buttons/Start1.png");
-    engine::render::Sprite sprite_parallax(
-        "D:/workspace/SunnyLand/assets/textures/Layers/back.png");
+    engine::render::Sprite sprite_world("D:/workspace/SunnyLand/assets/textures/Actors/frog.png");
+    engine::render::Sprite sprite_ui("D:/workspace/SunnyLand/assets/textures/UI/buttons/Start1.png");
+    engine::render::Sprite sprite_parallax("D:/workspace/SunnyLand/assets/textures/Layers/back.png");
 
     static float rotation = 0.0f;
     rotation += 0.1f;
 
     // 注意渲染顺序
-    renderer_->DrawParallax(*camera_, sprite_parallax, glm::vec2(100, 100),
-                            glm::vec2(0.5f, 0.5f), glm::bvec2(true, false));
-    renderer_->DrawSprite(*camera_, sprite_world, glm::vec2(200, 200),
-                          glm::vec2(1.0f, 1.0f), rotation);
+    renderer_->DrawParallax(*camera_, sprite_parallax, glm::vec2(100, 100), glm::vec2(0.5f, 0.5f),
+                            glm::bvec2(true, false));
+    renderer_->DrawSprite(*camera_, sprite_world, glm::vec2(200, 200), glm::vec2(1.0f, 1.0f), rotation);
     renderer_->DrawUISprite(sprite_ui, glm::vec2(100, 100));
   }
   renderer_->Present();
@@ -133,9 +126,8 @@ void GameApp::HandleEvents() {
     return;
   }
   {
-    std::vector<std::string> actions = {
-        "move_up", "move_down", "move_left",      "move_right",     "jump",
-        "attack",  "pause",     "MouseLeftClick", "MouseRightClick"};
+    std::vector<std::string> actions = {"move_up", "move_down", "move_left",      "move_right",     "jump",
+                                        "attack",  "pause",     "MouseLeftClick", "MouseRightClick"};
 
     for (const auto& action : actions) {
       if (input_manager_->IsActionPressed(action)) {
@@ -171,9 +163,8 @@ bool GameApp::InitSDL() {
     return false;
   }
 
-  sdl_window_ =
-      SDL_CreateWindow(config_->WindowTitle().c_str(), config_->WindowWidth(),
-                       config_->WindowHeight(), SDL_WINDOW_RESIZABLE);
+  sdl_window_ = SDL_CreateWindow(config_->WindowTitle().c_str(), config_->WindowWidth(), config_->WindowHeight(),
+                                 SDL_WINDOW_RESIZABLE);
   if (!sdl_window_) {
     LOGE(TAG, "Failed to create window! SDL Error: {}", SDL_GetError());
     return false;
@@ -185,16 +176,14 @@ bool GameApp::InitSDL() {
     return false;
   }
 
-  SDL_SetRenderLogicalPresentation(sdl_renderer_, config_->WindowWidth() / 2,
-                                   config_->WindowHeight() / 2,
+  SDL_SetRenderLogicalPresentation(sdl_renderer_, config_->WindowWidth() / 2, config_->WindowHeight() / 2,
                                    SDL_LOGICAL_PRESENTATION_LETTERBOX);
   return true;
 }
 bool GameApp::InitResourceManager() {
   TRACEI(TAG);
   try {
-    resource_manager_ =
-        std::make_unique<engine::resource::ResourceManager>(sdl_renderer_);
+    resource_manager_ = std::make_unique<engine::resource::ResourceManager>(sdl_renderer_);
   } catch (const std::exception& e) {
     LOGE(TAG, "Failed to initialize ResourceManager! Error: {}", e.what());
     return false;
@@ -215,8 +204,7 @@ bool GameApp::InitTime() {
 bool GameApp::InitRenderer() {
   TRACEI(TAG);
   try {
-    renderer_ = std::make_unique<engine::render::Renderer>(
-        sdl_renderer_, resource_manager_.get());
+    renderer_ = std::make_unique<engine::render::Renderer>(sdl_renderer_, resource_manager_.get());
   } catch (const std::exception& e) {
     LOGE(TAG, "Failed to initialize Renderer! Error: {}", e.what());
     return false;
@@ -226,8 +214,8 @@ bool GameApp::InitRenderer() {
 bool GameApp::InitCamera() {
   TRACEI(TAG);
   try {
-    camera_ = std::make_unique<engine::render::Camera>(glm::vec2(
-        config_->WindowWidth() / 2.0f, config_->WindowHeight() / 2.0f));
+    camera_ = std::make_unique<engine::render::Camera>(
+        glm::vec2(config_->WindowWidth() / 2.0f, config_->WindowHeight() / 2.0f));
   } catch (const std::exception& e) {
     LOGE(TAG, "Failed to initialize Camera! Error: {}", e.what());
     return false;
@@ -236,14 +224,12 @@ bool GameApp::InitCamera() {
 }
 bool GameApp::InitConfig() {
   TRACEI(TAG);
-  config_ =
-      std::make_unique<Config>("D:/workspace/SunnyLand/assets/config.json");
+  config_ = std::make_unique<Config>("D:/workspace/SunnyLand/assets/config.json");
   return true;
 }
 bool GameApp::InitInputManager() {
   try {
-    input_manager_ = std::make_unique<engine::input::InputManager>(
-        sdl_renderer_, config_.get());
+    input_manager_ = std::make_unique<engine::input::InputManager>(sdl_renderer_, config_.get());
   } catch (const std::exception& e) {
     LOGE(TAG, "Failed to initialize InputManager! Error: {}", e.what());
     return false;

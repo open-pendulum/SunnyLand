@@ -11,17 +11,14 @@ namespace engine::render {
  */
 class Camera final {
  public:
-  explicit Camera(
-      const glm::vec2& viewport_size,
-      const glm::vec2& position = glm::vec2(0.0f, 0.0f),
-      const std::optional<engine::utils::Rect>& limit_bounds = std::nullopt);
+  explicit Camera(const glm::vec2& viewport_size, const glm::vec2& position = glm::vec2(0.0f, 0.0f),
+                  const std::optional<engine::utils::Rect>& limit_bounds = std::nullopt);
 
   void Update(float delta_time_s);
   void Move(const glm::vec2& offset);
 
   glm::vec2 WorldToScreen(const glm::vec2& world_pos) const;
-  glm::vec2 WorldToScreenWithParallax(const glm::vec2& world_pos,
-                                      const glm::vec2& scroll_factor) const;
+  glm::vec2 WorldToScreenWithParallax(const glm::vec2& world_pos, const glm::vec2& scroll_factor) const;
   glm::vec2 ScreenToWorld(const glm::vec2& screen_pos) const;
 
   void SetPosition(const glm::vec2& position);

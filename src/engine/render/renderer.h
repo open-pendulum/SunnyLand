@@ -17,16 +17,12 @@ class Camera;
 
 class Renderer final {
  public:
-  explicit Renderer(SDL_Renderer* sdl_renderer,
-                    engine::resource::ResourceManager* resource_manager);
+  explicit Renderer(SDL_Renderer* sdl_renderer, engine::resource::ResourceManager* resource_manager);
 
-  void DrawSprite(const Camera& camera, const Sprite& sprite,
-                  const glm::vec2& position,
-                  const glm::vec2& scale = {1.0f, 1.0f},
-                  double angle = 0.0f) const;
-  void DrawParallax(const Camera& camera, const Sprite& sprite,
-                    const glm::vec2& position, const glm::vec2& scroll_factor,
-                    const glm::bvec2& repeat = {true, true},
+  void DrawSprite(const Camera& camera, const Sprite& sprite, const glm::vec2& position,
+                  const glm::vec2& scale = {1.0f, 1.0f}, double angle = 0.0f) const;
+  void DrawParallax(const Camera& camera, const Sprite& sprite, const glm::vec2& position,
+                    const glm::vec2& scroll_factor, const glm::bvec2& repeat = {true, true},
                     const glm::vec2& scale = {1.0f, 1.0f}) const;
 
   void DrawUISprite(const Sprite& sprite, const glm::vec2& position,
@@ -50,8 +46,7 @@ class Renderer final {
 
  private:
   std::optional<SDL_FRect> GetSpriteSrcRect(const Sprite& sprite) const;
-  [[nodiscard]] bool IsRectInViewport(const Camera& camera,
-                                      const SDL_FRect& rect) const;
+  [[nodiscard]] bool IsRectInViewport(const Camera& camera, const SDL_FRect& rect) const;
 
  private:
   SDL_Renderer* renderer_ = nullptr;

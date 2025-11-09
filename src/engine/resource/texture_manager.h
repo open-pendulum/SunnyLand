@@ -1,8 +1,8 @@
 #pragma once
 #include <SDL3/SDL_render.h>
 #include <glm/glm.hpp>
-#include <string>
 #include <memory>
+#include <string>
 
 struct SDL_Texture;
 
@@ -34,9 +34,7 @@ class TextureManager final {
       }
     }
   };
-  std::unordered_map<std::string,
-                     std::unique_ptr<SDL_Texture, SDLTextureDeleter>>
-      textures_;
+  std::unordered_map<std::string, std::unique_ptr<SDL_Texture, SDLTextureDeleter>> textures_;
   SDL_Renderer* renderer_;
 };
 }  // namespace engine::resource

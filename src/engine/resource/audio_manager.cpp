@@ -10,8 +10,7 @@ AudioManager::AudioManager() {
   MIX_InitFlags flags = MIX_INIT_OGG | MIX_INIT_MP3;
   if ((Mix_Init(flags) & flags) != flags) {
     LOGE(TAG, "Failed to initialize SDL_mixer with flags: %d", flags);
-    throw std::runtime_error("Failed to initialize SDL_mixer with flags: " +
-                             std::to_string(flags));
+    throw std::runtime_error("Failed to initialize SDL_mixer with flags: " + std::to_string(flags));
   }
 
   if (!Mix_OpenAudio(0, nullptr)) {
@@ -42,8 +41,7 @@ Mix_Chunk* AudioManager::LoadSound(const std::string& file_path) {
     LOGE(TAG, "Failed to load sound: {}", file_path);
     return nullptr;
   }
-  sounds_.emplace(file_path,
-                  std::unique_ptr<Mix_Chunk, SDLMixChunkDeleter>(raw_chunk));
+  sounds_.emplace(file_path, std::unique_ptr<Mix_Chunk, SDLMixChunkDeleter>(raw_chunk));
   LOGI(TAG, "Loaded sound: {}", file_path);
   return raw_chunk;
 }
@@ -78,8 +76,7 @@ Mix_Music* AudioManager::LoadMusic(const std::string& file_path) {
     LOGE(TAG, "Failed to load music: {}", file_path);
     return nullptr;
   }
-  musics_.emplace(file_path,
-                  std::unique_ptr<Mix_Music, SDLMixMusicDeleter>(raw_music));
+  musics_.emplace(file_path, std::unique_ptr<Mix_Music, SDLMixMusicDeleter>(raw_music));
   LOGI(TAG, "Loaded music: {}", file_path);
   return raw_music;
 }

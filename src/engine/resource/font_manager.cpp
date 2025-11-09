@@ -39,8 +39,7 @@ TTF_Font* FontManager::GetFont(const std::string& file_path, int font_size) {
   if (fonts_.contains(key)) {
     return fonts_.at(key).get();
   }
-  LOGW(TAG, "Font not found: {}, font_size: {}, try to load it", file_path,
-       font_size);
+  LOGW(TAG, "Font not found: {}, font_size: {}, try to load it", file_path, font_size);
   return LoadFont(file_path, font_size);
 }
 void FontManager::UnloadFont(const std::string& file_path, int font_size) {
@@ -49,8 +48,7 @@ void FontManager::UnloadFont(const std::string& file_path, int font_size) {
     fonts_.erase(key);
     LOGI(TAG, "Unloaded font: {}, font_size: {}", file_path, font_size);
   } else {
-    LOGW(TAG, "Font not found: {}, font_size: {}, try to unload it", file_path,
-         font_size);
+    LOGW(TAG, "Font not found: {}, font_size: {}, try to unload it", file_path, font_size);
   }
 }
 void FontManager::ClearFonts() {

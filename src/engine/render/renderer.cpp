@@ -9,8 +9,7 @@ namespace engine::render {
 namespace {
 DECLARE_TAG(Renderer);
 }  // namespace
-Renderer::Renderer(SDL_Renderer* sdl_renderer,
-                   engine::resource::ResourceManager* resource_manager)
+Renderer::Renderer(SDL_Renderer* sdl_renderer, engine::resource::ResourceManager* resource_manager)
     : renderer_(sdl_renderer), resource_manager_(resource_manager) {
   TRACEI(TAG);
   if (renderer_ == nullptr) {
@@ -21,8 +20,7 @@ Renderer::Renderer(SDL_Renderer* sdl_renderer,
   }
 }
 
-void Renderer::DrawSprite(const Camera& camera, const Sprite& sprite,
-                          const glm::vec2& position, const glm::vec2& scale,
+void Renderer::DrawSprite(const Camera& camera, const Sprite& sprite, const glm::vec2& position, const glm::vec2& scale,
                           double angle) const {
   auto texture = resource_manager_->GetTexture(sprite.GetTextureId());
   if (texture == nullptr) {
@@ -42,18 +40,14 @@ void Renderer::DrawSprite(const Camera& camera, const Sprite& sprite,
   if (!IsRectInViewport(camera, dst_rect)) {
     return;
   }
-  if (!SDL_RenderTextureRotated(
-          renderer_, texture, &src_rect.value(), &dst_rect, angle, nullptr,
-          sprite.IsFlipped() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_VERTICAL)) {
+  if (!SDL_RenderTextureRotated(renderer_, texture, &src_rect.value(), &dst_rect, angle, nullptr,
+                                sprite.IsFlipped() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_VERTICAL)) {
     LOGE(TAG, "Failed to render texture for {}!", sprite.GetTextureId());
     return;
   }
 }
-void Renderer::DrawParallax(const Camera& camera, const Sprite& sprite,
-                            const glm::vec2& position,
-                            const glm::vec2& scroll_factor,
-                            const glm::bvec2& repeat,
-                            const glm::vec2& scale) const {
+void Renderer::DrawParallax(const Camera& camera, const Sprite& sprite, const glm::vec2& position,
+                            const glm::vec2& scroll_factor, const glm::bvec2& repeat, const glm::vec2& scale) const {
   const auto texture = resource_manager_->GetTexture(sprite.GetTextureId());
   if (texture == nullptr) {
     LOGE(TAG, "Failed to get texture for {}!", sprite.GetTextureId());
@@ -67,8 +61,7 @@ void Renderer::DrawParallax(const Camera& camera, const Sprite& sprite,
   }
 
   // 应用相机变换
-  const glm::vec2 position_screen =
-      camera.WorldToScreenWithParallax(position, scroll_factor);
+  const glm::vec2 position_screen = camera.WorldToScreenWithParallax(position, scroll_factor);
 
   // 计算缩放后的纹理尺寸
   const float scaled_tex_w = src_rect.value().w * scale.x;
@@ -124,9 +117,8 @@ void Renderer::DrawUISprite(const Sprite& sprite, const glm::vec2& position,
     dest_rect.h = src_rect.value().h;
   }
 
-  if (!SDL_RenderTextureRotated(
-          renderer_, texture, &src_rect.value(), &dest_rect, 0.0, nullptr,
-          sprite.IsFlipped() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE)) {
+  if (!SDL_RenderTextureRotated(renderer_, texture, &src_rect.value(), &dest_rect, 0.0, nullptr,
+                                sprite.IsFlipped() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE)) {
     LOGE(TAG, "Failed to render texture for {}!", sprite.GetTextureId());
   }
 }
@@ -148,8 +140,7 @@ void Renderer::SetDrawColorFloat(float r, float g, float b, float a) const {
     LOGE(TAG, "Failed to set draw color: {}!", SDL_GetError());
   }
 }
-std::optional<SDL_FRect>
-Renderer::GetSpriteSrcRect(const Sprite& sprite) const {
+std::optional<SDL_FRect> Renderer::GetSpriteSrcRect(const Sprite& sprite) const {
   const auto texture = resource_manager_->GetTexture(sprite.GetTextureId());
   if (texture == nullptr) {
     LOGE(TAG, "Failed to get texture for {}!", sprite.GetTextureId());
@@ -159,8 +150,8 @@ Renderer::GetSpriteSrcRect(const Sprite& sprite) const {
   const auto src_rect = sprite.GetSourceRect();
   if (src_rect.has_value()) {
     if (src_rect.value().w <= 0 || src_rect.value().h <= 0) {
-      LOGE(TAG, "Invalid source rect for {}! w: {}, h: {}",
-           sprite.GetTextureId(), src_rect.value().w, src_rect.value().h);
+      LOGE(TAG, "Invalid source rect for {}! w: {}, h: {}", sprite.GetTextureId(), src_rect.value().w,
+           src_rect.value().h);
       return std::nullopt;
     }
     return src_rect;
@@ -173,10 +164,8 @@ Renderer::GetSpriteSrcRect(const Sprite& sprite) const {
     return result;
   }
 }
-bool Renderer::IsRectInViewport(const Camera& camera,
-                                const SDL_FRect& rect) const {
+bool Renderer::IsRectInViewport(const Camera& camera, const SDL_FRect& rect) const {
   glm::vec2 viewport_size = camera.GetViewportSize();
-  return rect.x + rect.w >= 0 && rect.x <= viewport_size.x &&
-         rect.y + rect.h >= 0 && rect.y <= viewport_size.y;
+  return rect.x + rect.w >= 0 && rect.x <= viewport_size.x && rect.y + rect.h >= 0 && rect.y <= viewport_size.y;
 }
 }  // namespace engine::render

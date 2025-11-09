@@ -1,10 +1,8 @@
 #include "sprite.h"
 
 namespace engine::render {
-Sprite::Sprite(const std::string& texture_id,
-               const std::optional<SDL_FRect>& source_rect, bool is_flipped)
-    : texture_id_(texture_id), source_rect_(source_rect),
-      is_flipped_(is_flipped) {
+Sprite::Sprite(const std::string& texture_id, const std::optional<SDL_FRect>& source_rect, bool is_flipped)
+    : texture_id_(texture_id), source_rect_(source_rect), is_flipped_(is_flipped) {
 }
 Sprite::~Sprite() {
 }

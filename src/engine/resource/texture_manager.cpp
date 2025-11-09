@@ -25,8 +25,7 @@ SDL_Texture* TextureManager::LoadTexture(const std::string& file_path) {
     LOGE(TAG, "Failed to load texture: {}", file_path);
     return nullptr;
   }
-  textures_.emplace(
-      file_path, std::unique_ptr<SDL_Texture, SDLTextureDeleter>(raw_texture));
+  textures_.emplace(file_path, std::unique_ptr<SDL_Texture, SDLTextureDeleter>(raw_texture));
   LOGI(TAG, "Loaded texture: {}", file_path);
   return raw_texture;
 }

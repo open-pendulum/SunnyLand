@@ -24,8 +24,7 @@ bool Config::LoadConfig(const std::string& file_name) {
     LOGI(TAG, "Loaded config file: {}", file_name);
     return true;
   } catch (const nlohmann::json::exception& e) {
-    LOGE(TAG, "Failed to parse config file: {}! Error: {}", file_name,
-         e.what());
+    LOGE(TAG, "Failed to parse config file: {}! Error: {}", file_name, e.what());
     return false;
   }
 }
@@ -74,8 +73,7 @@ const float& Config::SoundVolume() const {
   return sound_volume_;
 }
 
-const std::unordered_map<std::string, std::vector<std::string>>&
-Config::InputMappings() const {
+const std::unordered_map<std::string, std::vector<std::string>>& Config::InputMappings() const {
   return input_mappings_;
 }
 
@@ -125,9 +123,7 @@ void Config::FromJson(const nlohmann::json& json) {
   if (json.contains("input_mappings")) {
     const auto& input_mappings_json = json["input_mappings"];
     try {
-      auto input_mappings =
-          input_mappings_json
-              .get<std::unordered_map<std::string, std::vector<std::string>>>();
+      auto input_mappings = input_mappings_json.get<std::unordered_map<std::string, std::vector<std::string>>>();
       input_mappings_ = std::move(input_mappings);
       LOGI(TAG, "Loaded input mappings: {}", input_mappings_json.dump());
     } catch (const nlohmann::json::exception& e) {
@@ -138,16 +134,14 @@ void Config::FromJson(const nlohmann::json& json) {
   }
 }
 nlohmann::json Config::ToJson() const {
-  return nlohmann::ordered_json{
-      {"window",
-       {{"title", window_title_},
-        {"width", window_width_},
-        {"height", window_height_},
-        {"resizable", window_resizable_}}},
-      {"graphics", {{"vsync", vsync_}}},
-      {"performance", {{"target_fps", target_fps_}}},
-      {"audio",
-       {{"music_volume", music_volume_}, {"sound_volume", sound_volume_}}},
-      {"input_mappings", input_mappings_}};
+  return nlohmann::ordered_json{{"window",
+                                 {{"title", window_title_},
+                                  {"width", window_width_},
+                                  {"height", window_height_},
+                                  {"resizable", window_resizable_}}},
+                                {"graphics", {{"vsync", vsync_}}},
+                                {"performance", {{"target_fps", target_fps_}}},
+                                {"audio", {{"music_volume", music_volume_}, {"sound_volume", sound_volume_}}},
+                                {"input_mappings", input_mappings_}};
 }
 }  // namespace engine::core

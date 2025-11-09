@@ -48,9 +48,8 @@ class Config final {
   float sound_volume_{0.5f};
 
   std::unordered_map<std::string, std::vector<std::string>> input_mappings_{
-      {"move_left", {"A", "Left"}}, {"move_right", {"D", "Right"}},
-      {"move_up", {"W", "Up"}},     {"move_down", {"S", "Down"}},
-      {"jump", {"J", "Space"}},     {"attack", {"K", "MouseLeft"}},
+      {"move_left", {"A", "Left"}}, {"move_right", {"D", "Right"}}, {"move_up", {"W", "Up"}},
+      {"move_down", {"S", "Down"}}, {"jump", {"J", "Space"}},       {"attack", {"K", "MouseLeft"}},
       {"pause", {"P", "Escape"}}};
 };
 }  // namespace engine::core

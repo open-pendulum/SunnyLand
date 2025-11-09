@@ -1,9 +1,9 @@
 #pragma once
 
 #include <SDL3_mixer/SDL_mixer.h>
+#include <memory>
 #include <string>
 #include <unordered_map>
-#include <memory>
 
 namespace engine::resource {
 
@@ -39,9 +39,7 @@ class AudioManager final {
       }
     }
   };
-  std::unordered_map<std::string,
-                     std::unique_ptr<Mix_Chunk, SDLMixChunkDeleter>>
-      sounds_;
+  std::unordered_map<std::string, std::unique_ptr<Mix_Chunk, SDLMixChunkDeleter>> sounds_;
 
   struct SDLMixMusicDeleter {
     void operator()(Mix_Music* music) const {
@@ -50,8 +48,6 @@ class AudioManager final {
       }
     }
   };
-  std::unordered_map<std::string,
-                     std::unique_ptr<Mix_Music, SDLMixMusicDeleter>>
-      musics_;
+  std::unordered_map<std::string, std::unique_ptr<Mix_Music, SDLMixMusicDeleter>> musics_;
 };
 }  // namespace engine::resource
