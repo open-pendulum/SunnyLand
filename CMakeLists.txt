@@ -54,6 +54,13 @@ set(SOURCES
         src/engine/component/sprite_component.cpp
         src/engine/object/game_object.h
         src/engine/object/game_object.cpp
+        src/engine/scene/scene.h
+        src/engine/scene/scene.cpp
+        src/engine/scene/scene_manager.h
+        src/engine/scene/scene_manager.cpp
+
+        src/game/scene/game_scene.h
+        src/game/scene/game_scene.cpp
 )
 
 add_subdirectory(third_party)
@@ -63,8 +70,10 @@ add_executable(${TARGET}
 )
 
 target_include_directories(${TARGET} PRIVATE
+        src/
         src/common
         src/engine
+        src/game
 )
 
 

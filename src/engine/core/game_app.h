@@ -17,6 +17,10 @@ namespace engine::input {
 class InputManager;
 }  // namespace engine::input
 
+namespace engine::scene {
+class SceneManager;
+}  // namespace engine::scene
+
 namespace engine::core {
 class Time;
 class Config;
@@ -57,6 +61,7 @@ class GameApp {
   [[nodiscard]] bool InitConfig();
   [[nodiscard]] bool InitInputManager();
   [[nodiscard]] bool InitContext();
+  [[nodiscard]] bool InitSceneManager();
 
  private:
   SDL_Window* sdl_window_{nullptr};
@@ -69,5 +74,6 @@ class GameApp {
   std::unique_ptr<engine::core::Config> config_{nullptr};
   std::unique_ptr<engine::input::InputManager> input_manager_{nullptr};
   std::unique_ptr<Context> context_{nullptr};
+  std::unique_ptr<engine::scene::SceneManager> scene_manager_{nullptr};
 };
 }  // namespace engine::core

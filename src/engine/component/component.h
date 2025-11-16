@@ -34,7 +34,7 @@ class Component {
   }
   virtual void HandleInput(engine::core::Context& context) {
   }
-  virtual void Update(float delta_time_s, engine::core::Context& context) = 0;
+  virtual void Update(double delta_time_s, engine::core::Context& context) = 0;
 
   virtual void Render(engine::core::Context& context) {
   }

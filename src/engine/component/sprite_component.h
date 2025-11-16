@@ -74,7 +74,7 @@ class SpriteComponent final : public engine::component::Component {
 
   // Component 虚函数覆盖
   void Init() override;
-  void Update(float delta_time_s, engine::core::Context& context) override {
+  void Update(double delta_time_s, engine::core::Context& context) override {
   }
   void Render(engine::core::Context& context) override;
 

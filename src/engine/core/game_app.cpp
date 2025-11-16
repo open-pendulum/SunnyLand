@@ -1,6 +1,9 @@
 #include "game_app.h"
+#include "component/sprite_component.h"
+#include "component/transform_component.h"
 #include "config.h"
 #include "context.h"
+#include "game/scene/game_scene.h"
 #include "input/input_manager.h"
 #include "logger.hpp"
 #include "object/game_object.h"
@@ -8,8 +11,7 @@
 #include "render/renderer.h"
 #include "render/sprite.h"
 #include "resource/resource_manager.h"
-#include "component/transform_component.h"
-#include "component/sprite_component.h"
+#include "scene/scene_manager.h"
 #include "time.h"
 
 #include <SDL3/SDL.h>
@@ -17,11 +19,6 @@
 namespace engine::core {
 namespace {
 DECLARE_TAG(GameApp)
-engine::object::GameObject game_object("test_game_object");
-
-void TestGameObject() {
-
-}
 
 }  // namespace
 GameApp::GameApp() {
@@ -89,66 +86,26 @@ bool GameApp::Init() {
     LOGE(TAG, "Failed to initialize!");
     return false;
   }
-  {
-    spdlog::info("========== 测试组件系统 ==========");
-
-    // 1. 添加 TransformComponent，让对象出现在 (100, 100)
-    game_object.AddComponent<engine::component::TransformComponent>(
-        glm::vec2(100.0f, 100.0f)
-    );
-
-    // 2. 添加 SpriteComponent，显示箱子贴图，设置渲染中心为图片的几何中心
-    game_object.AddComponent<engine::component::SpriteComponent>(
-        "D:/workspace/SunnyLand/assets/textures/Props/big-crate.png",
-        *resource_manager_,
-        engine::utils::Alignment::BOTTOM_CENTER
-    );
-
-    // 3. 获取 TransformComponent，修改缩放和旋转
-    game_object.GetComponent<engine::component::TransformComponent>()->SetScale(glm::vec2(2.0f, 2.0f));  // 放大 2 倍
-    game_object.GetComponent<engine::component::TransformComponent>()->SetRotation(30.0f);                // 旋转 30 度
-    spdlog::info("✓ Transform 组件配置完成");
-
-    spdlog::info("====================================");
+  if (!InitSceneManager()) {
+    LOGE(TAG, "Failed to initialize!");
+    return false;
   }
+
+  auto scene = std::make_unique<game::scene::GameScene>("GameScene", *context_, *scene_manager_);
+  scene_manager_->RequestPushScene(std::move(scene));
+
   is_running_ = true;
 
   return true;
 }
 
 void GameApp::Update(double delta_time_s) {
-  {
-    // test camera
-    auto key_state = SDL_GetKeyboardState(nullptr);
-    if (key_state[SDL_SCANCODE_UP])
-      camera_->Move(glm::vec2(0, -1));
-    if (key_state[SDL_SCANCODE_DOWN])
-      camera_->Move(glm::vec2(0, 1));
-    if (key_state[SDL_SCANCODE_LEFT])
-      camera_->Move(glm::vec2(-1, 0));
-    if (key_state[SDL_SCANCODE_RIGHT])
-      camera_->Move(glm::vec2(1, 0));
-  }
+  scene_manager_->Update(delta_time_s);
 }
 
 void GameApp::Render() {
   renderer_->ClearScreen();
-  {
-    // test render
-    engine::render::Sprite sprite_world("D:/workspace/SunnyLand/assets/textures/Actors/frog.png");
-    engine::render::Sprite sprite_ui("D:/workspace/SunnyLand/assets/textures/UI/buttons/Start1.png");
-    engine::render::Sprite sprite_parallax("D:/workspace/SunnyLand/assets/textures/Layers/back.png");
-
-    static float rotation = 0.0f;
-    rotation += 0.1f;
-
-    // 注意渲染顺序
-    renderer_->DrawParallax(*camera_, sprite_parallax, glm::vec2(100, 100), glm::vec2(0.5f, 0.5f),
-                            glm::bvec2(true, false));
-    renderer_->DrawSprite(*camera_, sprite_world, glm::vec2(200, 200), glm::vec2(1.0f, 1.0f), rotation);
-    renderer_->DrawUISprite(sprite_ui, glm::vec2(100, 100));
-  }
-  game_object.Render(*context_);
+  scene_manager_->Render();
   renderer_->Present();
 }
 void GameApp::HandleEvents() {
@@ -157,22 +114,7 @@ void GameApp::HandleEvents() {
     is_running_ = false;
     return;
   }
-  {
-    std::vector<std::string> actions = {"move_up", "move_down", "move_left",      "move_right",     "jump",
-                                        "attack",  "pause",     "MouseLeftClick", "MouseRightClick"};
-
-    for (const auto& action : actions) {
-      if (input_manager_->IsActionPressed(action)) {
-        spdlog::info(" {} 按下 ", action);
-      }
-      if (input_manager_->IsActionReleased(action)) {
-        spdlog::info(" {} 抬起 ", action);
-      }
-      if (input_manager_->IsActionDown(action)) {
-        spdlog::info(" {} 按下中 ", action);
-      }
-    }
-  }
+  scene_manager_->HandleInput();
 }
 void GameApp::Close() {
   TRACEI(TAG);
@@ -275,6 +217,16 @@ bool GameApp::InitContext() {
     LOGE(TAG, "Failed to initialize Context! Error: {}", e.what());
     return false;
   }
+  return true;
+}
+bool GameApp::InitSceneManager() {
+  try {
+    scene_manager_ = std::make_unique<engine::scene::SceneManager>(*context_);
+  } catch (const std::exception& e) {
+    LOGE(TAG, "Failed to initialize SceneManager! Error: {}", e.what());
+    return false;
+  }
+  LOGI(TAG, "Initialized scene manager");
   return true;
 }
 }  // namespace engine::core

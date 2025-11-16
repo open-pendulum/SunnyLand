@@ -41,7 +41,7 @@ class TransformComponent final : public Component {
   }
 
  private:
-  void Update(float delta_time_s, engine::core::Context& context) override {
+  void Update(double delta_time_s, engine::core::Context& context) override {
   }
 };
 

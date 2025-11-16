@@ -31,19 +31,19 @@ class GameObject final {
   void SetName(const std::string& name) {
     name_ = name;
   }
-  const std::string& GetName() const {
+  [[nodiscard]] const std::string& GetName() const {
     return name_;
   }
   void SetTag(const std::string& tag) {
     tag_ = tag;
   }
-  const std::string& GetTag() const {
+  [[nodiscard]] const std::string& GetTag() const {
     return tag_;
   }
   void SetNeedRemove(bool need_remove) {
     need_remove_ = need_remove;
   }
-  bool IsNeedRemove() const {
+  [[nodiscard]] bool IsNeedRemove() const {
     return need_remove_;
   }
 
@@ -81,7 +81,7 @@ class GameObject final {
   }
 
   template <typename T>
-  bool HasComponent() const {
+  [[nodiscard]] bool HasComponent() const {
     static_assert(std::is_base_of_v<engine::component::Component, T>, "T 必须继承自 Component");
     // contains方法为 C++20 新增
     return components_.contains(std::type_index(typeid(T)));
@@ -98,7 +98,7 @@ class GameObject final {
   }
 
   // 关键循环函数
-  void Update(float delta_time_s, engine::core::Context& context);
+  void Update(double delta_time_s, engine::core::Context& context);
   void Render(engine::core::Context& context);
   void Clean();
   void HandleInput(engine::core::Context& context);

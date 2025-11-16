@@ -9,7 +9,7 @@ GameObject::GameObject(const std::string& name, const std::string& tag) : name_(
   spdlog::trace("GameObject created: {} {}", name_, tag_);
 }
 
-void GameObject::Update(float delta_time_s, engine::core::Context& context) {
+void GameObject::Update(double delta_time_s, engine::core::Context& context) {
   // 遍历所有组件并调用它们的 update 方法
   for (auto& pair : components_) {
     pair.second->Update(delta_time_s, context);
